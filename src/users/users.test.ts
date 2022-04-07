@@ -19,19 +19,7 @@ const initialUsers = [
 		email: 'fawzan@gmail.com',
 		password: '123456',
 		role: 'merchant',
-	},
-	{
-		name: 'Micheal John',
-		email: 'micheal@gmail.com',
-		password: '123456',
-		role: 'user',
-	},
-	{
-		name: 'Ebuka Ugo',
-		email: 'ebuka@gmail.com',
-		password: '123456',
-		role: 'merchant',
-	},
+	}
 ];
 
 beforeEach(async () => {
@@ -39,9 +27,7 @@ beforeEach(async () => {
 	await UserModel.deleteMany();
 	await api.post('/api/v1/users').send(initialUsers[0]);
 	await api.post('/api/v1/users').send(initialUsers[1]);
-	await api.post('/api/v1/users').send(initialUsers[2]);
-	await api.post('/api/v1/users').send(initialUsers[3]);
-});
+}, 100000);
 
 describe('User API', () => {
 
@@ -51,7 +37,7 @@ describe('User API', () => {
 			.expect(200)
 			.expect('Content-Type', /application\/json/);
 
-		expect(res.body).toHaveLength(4);
+		expect(res.body).toHaveLength(2);
 	});
 	test('POST /api/v1/users => new user can be added', async () => {
 		const newUser = {
