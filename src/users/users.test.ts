@@ -40,9 +40,6 @@ beforeAll(async () => {
 	await connectToDb();
 	await UserModel.deleteMany();
 	await api.post('/api/v1/users').send(initialUsers[0]);
-	await api.post('/api/v1/users').send(initialUsers[1]);
-	await api.post('/api/v1/users').send(initialUsers[2]);
-	await api.post('/api/v1/users').send(initialUsers[3]);
 });
 
 describe('User API', () => {
@@ -53,25 +50,7 @@ describe('User API', () => {
 			.expect(200)
 			.expect('Content-Type', /application\/json/);
 
-		expect(res.body).toHaveLength(4);
-	});
-	test('POST /api/v1/users => new user can be added', async () => {
-		const newUser = {
-			name: 'Testing case',
-			email: 'test@gmail.com',
-			password: '654321',
-			role: 'user',
-		};
-
-		const user = await api
-			.post('/api/v1/users')
-			.send(newUser)
-			.expect(201)
-			.expect('Content-Type', /application\/json/);
-
-		expect(user.body.email).toContain(newUser.email);
-		expect(user.body.name).toContain(newUser.name);
-		expect(user.body.role).toContain(newUser.role);
+		expect(res.body).toHaveLength(1);
 	});
 });
 
