@@ -3,7 +3,6 @@ import mongoose from 'mongoose';
 import supertest from 'supertest';
 import app from '../../src/app';
 import { connectToDb } from '../../src/dbConnection';
-import UserModel from './users.model';
 
 const api = supertest(app);
 
@@ -36,9 +35,7 @@ const initialUsers = [
 
 beforeAll(async () => {
 
-	jest.setTimeout(1000000);
 	await connectToDb();
-	await UserModel.deleteMany();
 	await api.post('/api/v1/users').send(initialUsers[0]);
 });
 
