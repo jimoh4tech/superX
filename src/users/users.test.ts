@@ -33,6 +33,8 @@ const initialUsers = [
 	},
 ];
 
+jest.useRealTimers();
+
 beforeAll(async () => {
 
 	await connectToDb();
