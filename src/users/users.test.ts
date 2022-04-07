@@ -35,6 +35,8 @@ const initialUsers = [
 ];
 
 beforeAll(async () => {
+
+	jest.setTimeout(1000000);
 	await connectToDb();
 	await UserModel.deleteMany();
 	await api.post('/api/v1/users').send(initialUsers[0]);

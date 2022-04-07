@@ -12,9 +12,7 @@ const connectToDb = async (): Promise<void> => {
 			? process.env.TEST_MONGODB_URI
 			: process.env.MONGODB_URI;
 
-	await connect(MONGODB_URI, {
-		connectTimeoutMS: 10000000
-	})
+	await connect(MONGODB_URI)
 		.then(() => console.log('Connected to database'))
 		.catch((error) => console.log('error connecting to DB ' + error));
 };
