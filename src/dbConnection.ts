@@ -4,7 +4,8 @@ config();
 
 const connectToDb = async (): Promise<void> => {
 	if (!process.env.MONGODB_URI || !process.env.TEST_MONGODB_URI) {
-		return;
+		throw new Error("Error: MONGO_DB undefined");
+		
 	}
 
 	const MONGODB_URI =

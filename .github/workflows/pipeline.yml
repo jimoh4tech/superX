@@ -1,9 +1,7 @@
-name: super-exchange
+name: Super Exchange Backend CI/CD
 
 on:
   push:
-    branches: [main]
-  pull_request:
     branches: [main]
 
 jobs:
@@ -17,7 +15,10 @@ jobs:
           node-version: '17.x'
 
       - name: Install dependencies
-        run: npm install
+        run: npm 
+        
+      - name: Build
+        run: npm run build --if-present
 
       - name: Test
         run: npm test
@@ -25,8 +26,6 @@ jobs:
       - name: Run Eslint
         run: npm run lint
 
-      - name: Build
-        run: npm run build --if-present
 
   deploy:
     needs: [build]
