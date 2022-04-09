@@ -19,6 +19,7 @@ const createUser = async (req: Request, res: Response) => {
 		const passwordHash = await hash(newUser.password, saltRounds);
 		newUser.password = passwordHash;
 
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 		const createdUser = await UserModel.create(newUser);
 
 		res.status(201).json(createdUser);
