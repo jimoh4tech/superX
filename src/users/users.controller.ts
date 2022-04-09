@@ -2,13 +2,13 @@ import { Request, Response } from 'express';
 import { hash } from 'bcrypt';
 import UserModel from './users.model';
 import { throwError, toNewUser } from './users.utils';
-import { NewUser, Users } from './users.interface';
+import { NewUser, User, Users } from './users.interface';
 
 const createUser = async (req: Request, res: Response) => {
 	try {
 		// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 		const newUser: NewUser = toNewUser(req.body);
-		const existingUser = await UserModel.findOne({ email: newUser.email });
+		const existingUser: User | null = await UserModel.findOne({ email: newUser.email });
 
 		if (existingUser) {
 			res
