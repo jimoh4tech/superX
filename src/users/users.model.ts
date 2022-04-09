@@ -1,4 +1,4 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model, models } from 'mongoose';
 import { User } from './users.interface';
 
 const schema = new Schema<User>({
@@ -26,6 +26,6 @@ schema.set('toJSON', {
   }
 });
 
-const UserModel = model<User>('User', schema);
+const UserModel = models.User || model<User>('User', schema);
 
 export default UserModel;
