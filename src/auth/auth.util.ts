@@ -5,10 +5,10 @@ export const getDecodedToken = (auth: string): Token => {
   let token = '';
 	if (auth && auth.toLowerCase().startsWith('bearer ')) {
 		token = auth.substring(7);
-  }
-  if (!process.env.SECRET) process.exit(1);
+	}
+	const secret: string = process.env.SECRET || 'test-environent';
 	// eslint-disable-next-line @typescript-eslint/no-unsafe-call
-	const decodedToken = verify(token, process.env.SECRET) as Token;
+	const decodedToken = verify(token, secret) as Token;
 
 	if (!decodedToken)
 		throw new Error('Invalid or missing token');

@@ -22,10 +22,10 @@ const login = async (req: Request, res: Response) => {
 			email: user?.email,
 			id: user?.id,
 		};
-		if (!process.env.SECRET) process.exit(1);
+		const secret: string = process.env.SECRET || 'test-environent';
 
 		// eslint-disable-next-line @typescript-eslint/no-unsafe-call
-		const token = sign(userForToken, process.env.SECRET, { expiresIn: '1h' });
+		const token = sign(userForToken, secret, { expiresIn: '1h' });
 
 		res.status(200).json({ token, email: user?.email, id: user?.id });
 	} catch (error: unknown) {
