@@ -12,7 +12,7 @@ import {
 } from './stores.controller';
 
 import { createItem } from '../items/items.controller';
-// import { getStoreOrders } from '../orders/orders.controller';
+import { getStoreOrders } from '../orders/orders.controller';
 
 const storeRouter = Router();
 
@@ -30,7 +30,7 @@ storeRouter.delete('/:id', auth, deleteStore);
 
 storeRouter.post('/:id/items', auth, createItem);
 
-// storeRouter.get('/:id/orders', auth, getStoreOrders);
+storeRouter.get('/:id/orders', auth, getStoreOrders);
 
 storeRouter.get('/:id/items', getStoreItems);
 
