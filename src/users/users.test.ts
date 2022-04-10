@@ -63,8 +63,6 @@ describe('User API', () => {
 		expect(user.body.role).toContain(newUser.role);
 	});
 
-	
-
 	let res: Response;
 	describe('LOGIN API', () => {
 		const userLogin = {
