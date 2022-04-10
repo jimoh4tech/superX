@@ -1,8 +1,7 @@
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import { connection, connect } from 'mongoose';
-import supertest from 'supertest';
+import supertest, { Response } from 'supertest';
 import app from '../../src/app';
-import UserModel from './users.model';
 
 const api = supertest(app);
 
@@ -29,15 +28,11 @@ beforeAll(async () => {
 		mongodb = await MongoMemoryServer.create();
 		const uri = mongodb.getUri();
 		await connect(uri);
-		await UserModel.insertMany(initialUsers);
+		await api.post('/api/v1/users').send(initialUsers[0]);
+		await api.post('/api/v1/users').send(initialUsers[1]);
 	} catch (error) {
 		console.error(error);
 	}
-});
-
-afterAll(async () => {
-	await connection.close();
-	await mongodb.stop();
 });
 
 describe('User API', () => {
@@ -67,4 +62,65 @@ describe('User API', () => {
 		expect(user.body.name).toContain(newUser.name);
 		expect(user.body.role).toContain(newUser.role);
 	});
+
+	
+
+	let res: Response;
+	describe('LOGIN API', () => {
+		const userLogin = {
+			email: 'abu@gmail.com',
+			password: '123456',
+		};
+
+		test('POST /api/v1/login => user can login', async () => {
+			const res = await api
+				.post('/api/v1/login')
+				.send(userLogin)
+				.expect(200)
+				.expect('Content-Type', /application\/json/);
+
+			expect(res.body.token).toBeDefined();
+		});
+		beforeEach(async () => {
+			res = await api
+				.post('/api/v1/login')
+				.send(userLogin)
+				.expect(200)
+				.expect('Content-Type', /application\/json/);
+		});
+
+		test('PUT /api/v1/users/:id => only valid user can update their personal details', async () => {
+			const userToUpdate = {
+				name: 'Testing updating',
+				email: 'abu@gmail.com',
+				password: '123456',
+				role: 'user',
+			};
+
+			const userRes = await api.get('/api/v1/users');
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+			const user = userRes.body[0];
+
+			await api
+				.put(`/api/v1/users/${user.id}`)
+				.set('Authorization', `Bearer ${res.body.token}`)
+				.send(userToUpdate)
+				.expect(200);
+		});
+
+		test('DELETE /api/v1/users/:id => only valid users can delete their account', async () => {
+			const userRes = await api.get('/api/v1/users');
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+			const user = userRes.body[0];
+			await api
+				.delete(`/api/v1/users/${user.id}`)
+				.set('Authorization', `Bearer ${res.body.token}`)
+				.expect(204);
+		});
+	});
+});
+
+afterAll(async () => {
+	await connection.close();
+	await mongodb.stop();
 });
