@@ -27,6 +27,18 @@ const app = express();
 app.use(helmet());
 app.use(cors());
 app.use(express.json());
+
+app.use('/', (req, res, next) => {
+	if (req.url === '/') {
+		res
+			.status(200)
+			.send(
+				'API is running. Click <a href="https://documenter.getpostman.com/view/15084009/UVyyrsGW">here</a> for available endpoints'
+			);
+	}
+	next();
+});
+
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/login', loginRouter);
 app.use('/api/v1/stores', storeRouter);
@@ -37,8 +49,6 @@ app.use('/api/v1/reviews', reviewRouter);
 
 app.use(errorHandler);
 app.use(notFoundHandler);
-
-
 /**
  * Server Activation and Database connection
  */
